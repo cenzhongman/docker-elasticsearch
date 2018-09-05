@@ -98,3 +98,11 @@ volumes:
 networks:
   esnet:
 ```
+
+执行
+
+```sh
+docker-compose up -d
+```
+
+* -d 表示后台运行
