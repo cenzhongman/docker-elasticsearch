@@ -86,6 +86,16 @@ services:
       - esdata3:/usr/share/elasticsearch/data
     networks:
       - esnet
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.4.0
+    container_name: kibana
+    environment:
+      SERVER_NAME: kibana
+      ELASTICSEARCH_URL: http://docker-cluster:9200
+    ports:
+      - 5601:5601
+    networks:
+      - esnet
 
 volumes:
   esdata1:
