@@ -91,7 +91,7 @@ services:
     container_name: kibana
     environment:
       SERVER_NAME: kibana
-      ELASTICSEARCH_URL: http://docker-cluster:9200
+      ELASTICSEARCH_URL: http://elasticsearch:9200
     ports:
       - 5601:5601
     networks:
