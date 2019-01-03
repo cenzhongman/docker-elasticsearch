@@ -1,75 +1,117 @@
+# es分布式多节点的docker-composer.yml文件
+# 用于一把梭部署4docker(1主节点，3数据节点)
+# author : cenzhongman
+# email : cenzhongman@163.com
+
 version: '2.2'
 services:
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.0
-    container_name: elasticsearch
+  es-master:
+    image: cenzhongman/elasticsearch-ik:latest
+    build: .
+    container_name: es-master
     environment:
       - cluster.name=docker-cluster
+      - node.name=es-master
+      - node.master=true
+      - node.data=false
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
       memlock:
         soft: -1
         hard: -1
-    volumes:
-      - esdata1:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
       - 9300:9300
+    volumes:
+      - es-master:/usr/share/elasticsearch/data
     networks:
       - esnet
-
-  elasticsearch2:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.0
-    container_name: elasticsearch2
+  
+  es-datanode1:
+    image:  cenzhongman/elasticsearch-ik:latest 
+    container_name: es-datanode1
     environment:
       - cluster.name=docker-cluster
+      - node.name=es-datanode1
+      - node.master=false
+      - node.data=true
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - "discovery.zen.ping.unicast.hosts=elasticsearch"
+      - "discovery.zen.ping.unicast.hosts=es-master"
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
-      - esdata2:/usr/share/elasticsearch/data
+      - es-datanode1:/usr/share/elasticsearch/data
     networks:
       - esnet
 
-  elasticsearch3:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.0
-    container_name: elasticsearch3
+  es-datanode2:
+    image:  cenzhongman/elasticsearch-ik:latest
+    container_name: es-datanode2
     environment:
       - cluster.name=docker-cluster
+      - node.name=es-datanode2
+      - node.master=false
+      - node.data=true
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - "discovery.zen.ping.unicast.hosts=elasticsearch"
+      - "discovery.zen.ping.unicast.hosts=es-master"
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
-      - esdata3:/usr/share/elasticsearch/data
+      - es-datanode2:/usr/share/elasticsearch/data
     networks:
       - esnet
+
+  es-datanode3:
+    image:  cenzhongman/elasticsearch-ik:latest
+    container_name: es-datanode3
+    environment:
+      - cluster.name=docker-cluster
+      - node.name=es-datanode3
+      - node.master=false
+      - node.data=true
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "discovery.zen.ping.unicast.hosts=es-master"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - es-datanode3:/usr/share/elasticsearch/data
+    networks:
+      - esnet
+  
   kibana:
-    image: docker.elastic.co/kibana/kibana:6.4.0
+    image: kibana:6.4.0
     container_name: kibana
     environment:
-      SERVER_NAME: kibana
-      ELASTICSEARCH_URL: http://elasticsearch:9200
+      - SERVER_NAME=kibana
+      - ELASTICSEARCH_URL=http://es-master:9200
     ports:
       - 5601:5601
     networks:
       - esnet
 
-volumes:
-  esdata1:
-    driver: local
-  esdata2:
-    driver: local
-  esdata3:
-    driver: local
+  head:
+    image: mobz/elasticsearch-head:5
+    container_name: elasticsearch-head
+    ports:
+      - 9100:9100
+    networks:
+      - esnet
 
 networks:
   esnet:
+
+volumes: 
+  es-master:
+  es-datanode1:
+  es-datanode2:
+  es-datanode3:
