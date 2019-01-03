@@ -99,7 +99,7 @@ services:
     networks:
       - esnet
 
-  head:
+  elasticsearch-head:
     image: mobz/elasticsearch-head:5
     container_name: elasticsearch-head
     ports:
