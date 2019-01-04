@@ -25,6 +25,7 @@ services:
       - 9300:9300
     volumes:
       - es-master:/usr/share/elasticsearch/data
+      - ./config/elasticsearch-master.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     networks:
       - esnet
   
@@ -34,8 +35,6 @@ services:
     environment:
       - cluster.name=docker-cluster
       - node.name=es-datanode1
-      - node.master=false
-      - node.data=true
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - "discovery.zen.ping.unicast.hosts=es-master"
@@ -45,6 +44,7 @@ services:
         hard: -1
     volumes:
       - es-datanode1:/usr/share/elasticsearch/data
+      - ./config/elasticsearch-datanode.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     networks:
       - esnet
 
@@ -54,8 +54,6 @@ services:
     environment:
       - cluster.name=docker-cluster
       - node.name=es-datanode2
-      - node.master=false
-      - node.data=true
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - "discovery.zen.ping.unicast.hosts=es-master"
@@ -65,6 +63,7 @@ services:
         hard: -1
     volumes:
       - es-datanode2:/usr/share/elasticsearch/data
+      - ./config/elasticsearch-datanode.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     networks:
       - esnet
 
@@ -74,8 +73,6 @@ services:
     environment:
       - cluster.name=docker-cluster
       - node.name=es-datanode3
-      - node.master=false
-      - node.data=true
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - "discovery.zen.ping.unicast.hosts=es-master"
@@ -85,6 +82,7 @@ services:
         hard: -1
     volumes:
       - es-datanode3:/usr/share/elasticsearch/data
+      - ./config/elasticsearch-datanode.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     networks:
       - esnet
   

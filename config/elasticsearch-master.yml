@@ -1,0 +1,18 @@
+#es分布式多节点的主节点配置文件
+#author : yewei_andy
+#email : 896992701yw@gmail.com
+node.master: true #主节点
+node.data: false
+network.host: 0.0.0.0
+# transport.host: localhost
+#network.publish_host: 172.16.73.50
+discovery.zen.minimum_master_nodes: 1
+gateway.recover_after_nodes: 2
+gateway.recover_after_time: 5m
+gateway.expected_nodes: 1
+#script.engine.groovy.inline.search: on
+#script.engine.groovy.inline.aggs: on
+indices.recovery.max_bytes_per_sec: 20mb
+#discovery.zen.ping.unicast.hosts: ["es_datanode1:9300","es_datanode2:9300","es_datanode3:9300","es_master:9300"]
+http.cors.enabled: true
+http.cors.allow-origin: "*"
