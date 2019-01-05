@@ -10,10 +10,7 @@ services:
     build: .
     container_name: es-master
     environment:
-      - cluster.name=docker-cluster
       - node.name=es-master
-      - node.master=true
-      - node.data=false
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
@@ -102,6 +99,30 @@ services:
     container_name: elasticsearch-head
     ports:
       - 9100:9100
+    networks:
+      - esnet
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:6.5.4
+    container_name: logstash
+    environment:
+      - XPACK_MONITORING_ELASTICSEARCH_URL=http://es-master:9200
+    ports:
+      - 9600:9600
+    networks:
+      - esnet
+  
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:6.5.4
+    container_name: filebeat
+    user: root
+    environment:
+      - setup.kibana.host=kibana:5601
+      - output.elasticsearch.hosts=["es-master:9200"]
+    volumes:    
+      - ./config/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - esnet
 
