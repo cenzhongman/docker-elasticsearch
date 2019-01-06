@@ -109,6 +109,7 @@ services:
       - XPACK_MONITORING_ELASTICSEARCH_URL=http://es-master:9200
     ports:
       - 9600:9600
+      - 5400:5400
     networks:
       - esnet
   

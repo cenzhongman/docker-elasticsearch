@@ -16,4 +16,4 @@ processors:
 #   username: '${ELASTICSEARCH_USERNAME:}'
 #   password: '${ELASTICSEARCH_PASSWORD:}'
 output.logstash:
-  hosts: ["logstash:9600"]
+  hosts: ["logstash:5400"]
