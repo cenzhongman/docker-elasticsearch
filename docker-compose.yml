@@ -3,7 +3,7 @@
 # author : cenzhongman
 # email : cenzhongman@163.com
 
-version: '2.2'
+version: '2'
 services:
   es-master:
     image: cenzhongman/elasticsearch-ik:latest
