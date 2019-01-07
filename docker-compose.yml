@@ -108,7 +108,7 @@ services:
     volumes:
       - ./pipeline/:/usr/share/logstash/pipeline/
     ports:
-      - 9600:9600
+      # - 9600:9600
       - 5400:5400
     networks:
       - esnet
@@ -117,9 +117,6 @@ services:
     image: docker.elastic.co/beats/filebeat:6.5.4
     container_name: filebeat
     user: root
-    # environment:
-    #   - setup.kibana.host=kibana:5601
-    #   - output.elasticsearch.hosts=["es-master:9200"]
     volumes:
       - ./config/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
