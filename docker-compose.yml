@@ -105,8 +105,8 @@ services:
   logstash:
     image: docker.elastic.co/logstash/logstash:6.5.4
     container_name: logstash
-    environment:
-      - XPACK_MONITORING_ELASTICSEARCH_URL=http://es-master:9200
+    volumes:
+      - ./pipeline/:/usr/share/logstash/pipeline/
     ports:
       - 9600:9600
       - 5400:5400
@@ -117,9 +117,9 @@ services:
     image: docker.elastic.co/beats/filebeat:6.5.4
     container_name: filebeat
     user: root
-    environment:
-      - setup.kibana.host=kibana:5601
-      - output.elasticsearch.hosts=["es-master:9200"]
+    # environment:
+    #   - setup.kibana.host=kibana:5601
+    #   - output.elasticsearch.hosts=["es-master:9200"]
     volumes:
       - ./config/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
