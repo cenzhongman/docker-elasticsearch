@@ -7,6 +7,7 @@ version: '2'
 services:
   es-master:
     image: cenzhongman/elasticsearch-ik:latest
+    restart: always
     build: .
     container_name: es-master
     environment:
@@ -27,7 +28,8 @@ services:
       - esnet
   
   es-datanode1:
-    image:  cenzhongman/elasticsearch-ik:latest 
+    image:  cenzhongman/elasticsearch-ik:latest
+    restart: always
     container_name: es-datanode1
     environment:
       - cluster.name=docker-cluster
@@ -47,6 +49,7 @@ services:
 
   es-datanode2:
     image:  cenzhongman/elasticsearch-ik:latest
+    restart: always
     container_name: es-datanode2
     environment:
       - cluster.name=docker-cluster
@@ -66,6 +69,7 @@ services:
 
   es-datanode3:
     image:  cenzhongman/elasticsearch-ik:latest
+    restart: always
     container_name: es-datanode3
     environment:
       - cluster.name=docker-cluster
@@ -85,6 +89,7 @@ services:
   
   kibana:
     image: kibana:6.4.0
+    restart: always
     container_name: kibana
     environment:
       - SERVER_NAME=kibana
@@ -96,41 +101,23 @@ services:
 
   elasticsearch-head:
     image: mobz/elasticsearch-head:5
+    restart: always
     container_name: elasticsearch-head
     ports:
       - 9100:9100
     networks:
       - esnet
 
-  logstash:
-    image: docker.elastic.co/logstash/logstash:6.5.4
-    container_name: logstash
-    volumes:
-      - ./pipeline/:/usr/share/logstash/pipeline/
-    environment:
-      - XPACK_MONITORING_ELASTICSEARCH_URL=http://es-master:9200
-    ports:
-      # - 9600:9600
-      - 5400:5400
-    networks:
-      - esnet
-  
-  # filebeat:
-  #   image: docker.elastic.co/beats/filebeat:6.5.4
-  #   container_name: filebeat
-  #   user: root
-  #   volumes:
-  #     - ./config/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro
-  #     - /var/lib/docker/containers:/var/lib/docker/containers:ro
-  #     - /var/run/docker.sock:/var/run/docker.sock:ro
-  #   networks:
-  #     - esnet
-
 networks:
   esnet:
+    external: true
 
 volumes: 
   es-master:
+    external: true
   es-datanode1:
+    external: true  
   es-datanode2:
+    external: true
   es-datanode3:
+    external: true
